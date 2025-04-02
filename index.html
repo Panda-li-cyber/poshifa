@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>破十法计算练习</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', '楷体', sans-serif;
+            background-color: #f0f9ff;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            background-image: url('https://img.freepik.com/free-vector/hand-drawn-colorful-doodle-background_23-2149015287.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border: 3px solid #4CAF50;
+            position: relative;
+            z-index: 10;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: #FF6B6B;
+            font-size: 28px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .name-input {
+            margin: 15px 0;
+        }
+        
+        input[type="text"] {
+            padding: 8px 12px;
+            font-size: 16px;
+            border: 2px solid #4CAF50;
+            border-radius: 20px;
+            width: 60%;
+            text-align: center;
+            outline: none;
+        }
+        
+        .question-area {
+            margin: 20px 0;
+            min-height: 180px;
+        }
+        
+        .question {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+        
+        .question-number {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .answer-display {
+            display: inline-block;
+            min-width: 50px;
+            height: 35px;
+            font-size: 22px;
+            text-align: center;
+            border-bottom: 2px solid #4CAF50;
+            margin: 0 5px;
+            vertical-align: middle;
+        }
+        
+        .number-pad {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+        
+        .number-btn {
+            padding: 8px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            background-color: #FFD166;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .number-btn:hover {
+            background-color: #FFB347;
+        }
+        
+        .feedback {
+            font-size: 22px;
+            margin: 15px 0;
+            min-height: 30px;
+            height: 30px;
+        }
+        
+        .correct {
+            color: #06D6A0;
+            font-weight: bold;
+        }
+        
+        .incorrect {
+            color: #EF476F;
+            font-weight: bold;
+        }
+        
+        .progress {
+            margin-top: 15px;
+            font-size: 16px;
+            color: #666;
+        }
+        
+        .score-display {
+            display: flex;
+            justify-content: space-around;
+            margin: 15px 0;
+            font-size: 16px;
+        }
+        
+        .score-box {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 8px;
+            min-width: 80px;
+        }
+        
+        .final-result {
+            font-size: 22px;
+            margin-top: 25px;
+            display: none;
+        }
+        
+        .time {
+            color: blue;
+        }
+        
+        .score {
+            color: red;
+            font-weight: bold;
+        }
+        
+        .emoji {
+            font-size: 26px;
+            margin: 0 4px;
+        }
+        
+        .restart-btn, .screenshot-btn, .hint-btn, .submit-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-weight: bold;
+        }
+        
+        .submit-btn {
+            background-color: #4CAF50;
+        }
+        
+        .screenshot-btn {
+            background-color: #3498db;
+        }
+        
+        .hint-btn {
+            background-color: #9b59b6;
+        }
+        
+        .restart-btn {
+            background-color: #e74c3c;
+        }
+        
+        .explanation {
+            background-color: #f8f9fa;
+            border: 1px dashed #4CAF50;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 18px;
+        }
+        
+        .step {
+            margin: 10px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .arrow {
+            font-size: 24px;
+            margin: 0 10px;
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background-color: #f00;
+            border-radius: 50%;
+            animation: fall 5s linear infinite;
+            z-index: 1;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+        
+        .formula {
+            font-weight: bold;
+            color: #e74c3c;
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+        }
+        
+        .button-group {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>破十法计算练习 <span class="emoji">🧮</span></h1>
+        
+        <div class="name-input">
+            <input type="text" id="studentName" placeholder="请输入你的名字">
+        </div>
+        
+        <div class="score-display">
+            <div class="score-box">
+                得分: <span id="score">0</span>/100
+            </div>
+            <div class="score-box">
+                用时: <span id="timer">0分0秒</span>
+            </div>
+        </div>
+        
+        <div class="question-area" id="questionArea">
+            <p>点击开始按钮开始测试</p>
+            <button class="restart-btn" id="startBtn">开始</button>
+        </div>
+        
+        <div class="progress" id="progress">
+            题目: 0/10 | 当前得分: 0
+        </div>
+        
+        <div class="final-result" id="finalResult">
+        </div>
+    </div>
+
+    <audio id="correctSound" src="https://www.soundjay.com/human/sounds/applause-8.mp3" preload="auto"></audio>
+    <audio id="wrongSound" src="https://www.soundjay.com/buttons/sounds/button-10.mp3" preload="auto"></audio>
+    <audio id="celebrationSound" src="https://www.soundjay.com/human/sounds/applause-01.mp3" preload="auto"></audio>
+
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script>
+        // 全局变量
+        let score = 0;
+        let questionCount = 0;
+        let startTime = null;
+        let testStartTime = null;
+        let currentAnswer = '';
+        let testCompleted = false;
+        let currentA = 0;
+        let currentB = 0;
+        let timerInterval = null;
+        
+        // DOM元素
+        const questionArea = document.getElementById('questionArea');
+        const studentNameInput = document.getElementById('studentName');
+        const progressElement = document.getElementById('progress');
+        const finalResultElement = document.getElementById('finalResult');
+        const scoreElement = document.getElementById('score');
+        const timerElement = document.getElementById('timer');
+        const correctSound = document.getElementById('correctSound');
+        const wrongSound = document.getElementById('wrongSound');
+        const celebrationSound = document.getElementById('celebrationSound');
+        const startBtn = document.getElementById('startBtn');
+        
+        // 开始按钮点击事件
+        startBtn.addEventListener('click', () => {
+            startTest();
+        });
+        
+        // 开始测试
+        function startTest() {
+            // 检查是否输入了名字
+            const studentName = studentNameInput.value.trim();
+            if (!studentName) {
+                alert('请输入你的名字再开始测试哦！');
+                return;
+            }
+            
+            // 重置状态
+            questionCount = 0;
+            score = 0;
+            startTime = null;
+            testStartTime = null;
+            currentAnswer = '';
+            testCompleted = false;
+            clearInterval(timerInterval);
+            
+            // 更新显示
+            scoreElement.textContent = score;
+            timerElement.textContent = '0分0秒';
+            progressElement.textContent = '题目: 0/10 | 当前得分: 0';
+            finalResultElement.style.display = 'none';
+            
+            // 开始第一题
+            generateQuestion();
+        }
+        
+        // 更新计时器
+        function updateTimer() {
+            if (!testStartTime) return;
+            
+            const now = new Date();
+            const timeDiff = (now - testStartTime) / 1000; // 秒数
+            const minutes = Math.floor(timeDiff / 60);
+            const seconds = Math.floor(timeDiff % 60);
+            
+            timerElement.textContent = `${minutes}分${seconds}秒`;
+        }
+        
+        // 生成题目
+        function generateQuestion() {
+            if (questionCount >= 10) {
+                showFinalResult();
+                return;
+            }
+            
+            questionCount++;
+            currentAnswer = '';
+            
+            // 生成随机题目：11-15减去6-9
+            currentA = Math.floor(Math.random() * 5) + 11; // 11-15
+            currentB = Math.floor(Math.random() * 4) + 6;  // 6-9
+            
+            // 创建题目HTML
+            questionArea.innerHTML = `
+                <div class="question-number">第 ${questionCount} 题</div>
+                <div class="question">${currentA} - ${currentB} = <span class="answer-display" id="answerDisplay"></span></div>
+                <div class="number-pad" id="numberPad">
+                    <button class="number-btn">1</button>
+                    <button class="number-btn">2</button>
+                    <button class="number-btn">3</button>
+                    <button class="number-btn">4</button>
+                    <button class="number-btn">5</button>
+                    <button class="number-btn">6</button>
+                    <button class="number-btn">7</button>
+                    <button class="number-btn">8</button>
+                    <button class="number-btn">9</button>
+                    <button class="number-btn">0</button>
+                </div>
+                <div class="feedback" id="feedback"></div>
+                <div class="button-group">
+                    <button class="hint-btn" id="hintBtn">提示</button>
+                    <button class="submit-btn" id="submitBtn">提交</button>
+                </div>
+                <div class="explanation" id="explanation" style="display:none"></div>
+            `;
+            
+            // 获取新创建的DOM元素
+            const answerDisplay = document.getElementById('answerDisplay');
+            const numberPad = document.getElementById('numberPad');
+            const feedbackElement = document.getElementById('feedback');
+            const explanationElement = document.getElementById('explanation');
+            const submitBtn = document.getElementById('submitBtn');
+            const hintBtn = document.getElementById('hintBtn');
+            
+            // 数字按钮点击事件
+            numberPad.querySelectorAll('.number-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // 第一次输入时开始计时
+                    if (!testStartTime) {
+                        testStartTime = new Date();
+                        timerInterval = setInterval(updateTimer, 1000);
+                    }
+                    
+                    currentAnswer += btn.textContent;
+                    answerDisplay.textContent = currentAnswer;
+                });
+            });
+            
+            // 提示按钮
+            hintBtn.addEventListener('click', () => {
+                showExplanation();
+                // 滚动到解释部分
+                explanationElement.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // 提交按钮
+            submitBtn.addEventListener('click', () => {
+                checkAnswer();
+            });
+            
+            // 更新进度
+            updateProgress();
+        }
+        
+        // 检查答案
+        function checkAnswer() {
+            const userAnswer = parseInt(currentAnswer) || 0;
+            const correctAnswer = currentA - currentB;
+            const answerDisplay = document.getElementById('answerDisplay');
+            const feedbackElement = document.getElementById('feedback');
+            const explanationElement = document.getElementById('explanation');
+            
+            if (userAnswer === correctAnswer) {
+                // 播放正确音效
+                correctSound.play();
+                
+                feedbackElement.textContent = '正确，你真棒！';
+                feedbackElement.className = 'feedback correct';
+                
+                // 隐藏解释
+                explanationElement.style.display = 'none';
+                
+                // 更新分数
+                score += 10;
+                scoreElement.textContent = score;
+                
+                // 更新进度
+                updateProgress();
+                
+                // 0.5秒后生成下一题
+                setTimeout(() => {
+                    currentAnswer = '';
+                    generateQuestion();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 500);
+            } else {
+                // 播放错误音效
+                wrongSound.play();
+                
+                feedbackElement.textContent = '不对，再想想！';
+                feedbackElement.className = 'feedback incorrect';
+                
+                // 清空答案
+                currentAnswer = '';
+                answerDisplay.textContent = '';
+            }
+        }
+        
+        // 显示计算步骤
+        function showExplanation() {
+            const explanationElement = document.getElementById('explanation');
+            const remainder = 10 - currentB;
+            
+            explanationElement.innerHTML = `
+                <p><strong>破十法计算过程：</strong></p>
+                <div class="step">
+                    <span>${currentA} = 10 + ${currentA - 10}</span>
+                </div>
+                <div class="step">
+                    <span>10 - ${currentB} = ${10 - currentB}</span>
+                </div>
+                <div class="step">
+                    <span>${10 - currentB} + ${currentA - 10} = ${currentA - currentB}</span>
+                </div>
+                <div class="step">
+                    <span>正确答案：${currentA} - ${currentB} = ${currentA - currentB}</span>
+                </div>
+                <div class="formula">
+                    破十法口诀：<br>
+                    拆大数，分出10，<br>
+                    减小数，加剩数！
+                </div>
+            `;
+            
+            explanationElement.style.display = 'block';
+        }
+        
+        // 更新进度
+        function updateProgress() {
+            progressElement.textContent = `题目: ${questionCount}/10 | 当前得分: ${score}`;
+        }
+        
+        // 创建彩带效果
+        function createConfetti() {
+            const colors = ['#f00', '#0f0', '#00f', '#ff0', '#f0f', '#0ff'];
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = Math.random() * 10 + 5 + 'px';
+                confetti.style.height = Math.random() * 10 + 5 + 'px';
+                confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                document.body.appendChild(confetti);
+                
+                // 5秒后移除彩带
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+        
+        // 显示最终结果
+        function showFinalResult() {
+            clearInterval(timerInterval);
+            testCompleted = true;
+            const endTime = new Date();
+            const timeDiff = (endTime - testStartTime) / 1000; // 秒数
+            const minutes = Math.floor(timeDiff / 60);
+            const seconds = Math.floor(timeDiff % 60);
+            
+            // 播放庆祝音效
+            celebrationSound.play();
+            
+            // 创建彩带效果
+            createConfetti();
+            
+            finalResultElement.innerHTML = `
+                <p>恭喜<span class="emoji">🎉</span><strong>${studentNameInput.value}</strong><span class="emoji">🎉</span>同学！</p>
+                <p>用时: <span class="time">${minutes}分${seconds}秒</span></p>
+                <p>得分: <span class="score">${score}分</span></p>
+                <p>你真棒<span class="emoji">👏</span>！</p>
+                <div class="button-group">
+                    <button class="restart-btn" id="restartBtn">再来一次</button>
+                    <button class="screenshot-btn" id="screenshotBtn">拍照留念</button>
+                </div>
+            `;
+            
+            finalResultElement.style.display = 'block';
+            questionArea.innerHTML = '<p>测试完成！</p>';
+            
+            // 拍照留念按钮
+            document.getElementById('screenshotBtn').addEventListener('click', () => {
+                // 只截取最终结果部分
+                const resultContainer = document.createElement('div');
+                resultContainer.className = 'container';
+                resultContainer.style.maxWidth = '500px';
+                resultContainer.style.margin = '0 auto';
+                resultContainer.style.padding = '20px';
+                resultContainer.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+                resultContainer.style.borderRadius = '20px';
+                resultContainer.style.boxShadow = '0 0 15px rgba(0, 0, 0, 0.1)';
+                resultContainer.style.border = '3px solid #4CAF50';
+                
+                resultContainer.innerHTML = finalResultElement.innerHTML.replace('id="restartBtn"', '').replace('id="screenshotBtn"', '');
+                
+                const oldDisplay = finalResultElement.style.display;
+                finalResultElement.style.display = 'none';
+                
+                document.body.appendChild(resultContainer);
+                
+                html2canvas(resultContainer).then(canvas => {
+                    const link = document.createElement('a');
+                    link.download = '破十法练习成绩.png';
+                    link.href = canvas.toDataURL();
+                    link.click();
+                    document.body.removeChild(resultContainer);
+                    finalResultElement.style.display = oldDisplay;
+                });
+            });
+            
+            // 再来一次按钮
+            document.getElementById('restartBtn').addEventListener('click', () => {
+                // 清除所有彩带
+                document.querySelectorAll('.confetti').forEach(el => el.remove());
+                
+                // 重置测试状态
+                questionCount = 0;
+                score = 0;
+                currentAnswer = '';
+                testCompleted = false;
+                testStartTime = null;
+                clearInterval(timerInterval);
+                
+                // 更新显示
+                scoreElement.textContent = '0';
+                timerElement.textContent = '0分0秒';
+                finalResultElement.style.display = 'none';
+                progressElement.textContent = '题目: 0/10 | 当前得分: 0';
+                
+                // 保留学生姓名，重新开始测试
+                questionArea.innerHTML = `
+                    <p>点击开始按钮重新测试</p>
+                    <button class="restart-btn" id="startBtn">开始</button>
+                `;
+                
+                // 重新绑定开始按钮事件
+                document.getElementById('startBtn').addEventListener('click', startTest);
+                
+                // 滚动到顶部
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+    </script>
+</body>
+</html>
